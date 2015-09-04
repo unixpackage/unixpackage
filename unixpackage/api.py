@@ -177,7 +177,7 @@ def install(packages):
     if not packages_installed(packages):
         sys.stdout.write(
             ("I need to use sudo to run the following ")
-            ("command:\n ==> {}\n").format(install_command(packages))
+            ("command:\n ==> {}\n".format(install_command(packages)))
         )
         sys.stdout.flush()
         os.system(install_command(packages))

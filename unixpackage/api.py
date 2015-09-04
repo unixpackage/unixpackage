@@ -1,4 +1,5 @@
 from subprocess import call, PIPE
+from sys import stdout, platform
 from os import path
 import requests
 import platform
@@ -73,9 +74,9 @@ def return_code_zero(command):
 
 def what_distro_am_i():
     """Return an identifying name for the distro/platform."""
-    if sys.platform == "darwin":
+    if platform == "darwin":
         return "macosbrew"
-    elif sys.platform == "linux" or sys.platform == "linux2":
+    elif platform == "linux" or platform == "linux2":
         this_distro = platform.linux_distribution()[0].lower()
         if this_distro in DISTROS:
             return this_distro
@@ -87,7 +88,7 @@ def what_distro_am_i():
             )
     else:
         raise UnsupportedPlatform(
-            "Platform '{}' is not currently supported".format(sys.platform)
+            "Platform '{}' is not currently supported".format(platform)
         )
 
 
@@ -175,14 +176,12 @@ def install(packages):
         install(packages[10:])
         packages = packages[:10]
     if not packages_installed(packages):
-        sys.stdout.write(
-            ("I need to use sudo to run the following ")
-            ("command:\n ==> {}\n".format(install_command(packages)))
-        )
-        sys.stdout.flush()
+        stdout.write("I need to use sudo to run the following command:\n")
+        stdout.write("  ==> {}\n".format(install_command(packages)))
+        stdout.flush()
         os.system(install_command(packages))
     else:
-        sys.stdout.write(
+        stdout.write(
             "Already installed: {}\n".format(', '.join(packages))
         )
-        sys.stdout.flush()
+        stdout.flush()

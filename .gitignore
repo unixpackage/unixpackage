@@ -1,0 +1,6 @@
+*.kate-swp
+*.pyc
+setup.cfg
+build/
+dist/
+unixpackage.egg-info/

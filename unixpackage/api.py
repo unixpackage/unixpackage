@@ -118,15 +118,13 @@ def package_list(generic_package_list):
                     cache_write_handle.write(json.dumps(package_equivalents))
             elif req.status_code == 404:
                 raise PackageNotFound(
-                    ("Package {0} not found at ")
-                    ("https://unixpackage.github.io/{0}.json").format(package)
+                    ("Package {0} not found at "
+                     "https://unixpackage.github.io/{0}.json").format(package)
                 )
             else:
                 raise NetworkError(
-                    ("Error querying https://unixpackage.github.io/{}.json")
-                    ("- got status code {}.").format(
-                        package, req.status_code
-                    )
+                    ("Error querying https://unixpackage.github.io/{}.json"
+                     "- got status code {}.").format(package, req.status_code)
                 )
 
         if my_distro in package_equivalents:
@@ -135,8 +133,8 @@ def package_list(generic_package_list):
             equivalent = package_equivalents[my_parent]
         else:
             raise PackageNotFoundInEquivalents(
-                ("Package {0} for distro {1} not found in ")
-                ("https://unixpackage.github.io/{0}.json").format(
+                ("Package {0} for distro {1} not found in "
+                 "https://unixpackage.github.io/{0}.json").format(
                     package,
                     my_distro
                 )

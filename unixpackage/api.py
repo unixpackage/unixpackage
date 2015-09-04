@@ -1,5 +1,5 @@
 from subprocess import call, PIPE
-from sys import stdout, platform
+from sys import stdout
 from os import path
 import requests
 import platform
@@ -74,9 +74,9 @@ def return_code_zero(command):
 
 def what_distro_am_i():
     """Return an identifying name for the distro/platform."""
-    if platform == "darwin":
+    if sys.platform == "darwin":
         return "macosbrew"
-    elif platform == "linux" or platform == "linux2":
+    elif sys.platform == "linux" or sys.platform == "linux2":
         this_distro = platform.linux_distribution()[0].lower()
         if this_distro in DISTROS:
             return this_distro
@@ -88,7 +88,7 @@ def what_distro_am_i():
             )
     else:
         raise UnsupportedPlatform(
-            "Platform '{}' is not currently supported".format(platform)
+            "Platform '{}' is not currently supported".format(sys.platform)
         )
 
 

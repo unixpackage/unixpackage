@@ -81,11 +81,11 @@ def what_distro_am_i():
         if this_distro in DISTROS:
             return this_distro
         else:
-            raise UnsupportedPlatform(
-                "Linux distro {} is not a supported platform".format(
-                    this_distro
-                )
-            )
+            raise UnsupportedPlatform((
+                "Linux distro {} is not supported yet.\n"
+                "Raise an issue at http://github.com/unixpackage/unixpackage"
+                " for help."
+            ).format(this_distro))
     else:
         raise UnsupportedPlatform(
             "Platform '{}' is not currently supported".format(sys.platform)
@@ -117,28 +117,28 @@ def package_list(generic_package_list):
                 with open(cache_filename, 'w') as cache_write_handle:
                     cache_write_handle.write(json.dumps(package_equivalents))
             elif req.status_code == 404:
-                raise PackageNotFound(
-                    ("Package {0} not found at "
-                     "https://unixpackage.github.io/{0}.json").format(package)
-                )
+                raise PackageNotFound((
+                    "Package {0} not found at "
+                    "https://unixpackage.github.io/{0}.json\n"
+                    "Please consider adding it if it should exist!\n"
+                    "Simply raise an issue or issue a pull request on: "
+                    "http://github.com/unixpackage/unixpackage.github.io"
+                ).format(package))
             else:
-                raise NetworkError(
-                    ("Error querying https://unixpackage.github.io/{}.json"
-                     "- got status code {}.").format(package, req.status_code)
-                )
+                raise NetworkError((
+                    "Error querying https://unixpackage.github.io/{}.json"
+                    "- got status code {}."
+                ).format(package, req.status_code))
 
         if my_distro in package_equivalents:
             equivalent = package_equivalents[my_distro]
         elif my_parent in package_equivalents:
             equivalent = package_equivalents[my_parent]
         else:
-            raise PackageNotFoundInEquivalents(
-                ("Package {0} for distro {1} not found in "
-                 "https://unixpackage.github.io/{0}.json").format(
-                    package,
-                    my_distro
-                )
-            )
+            raise PackageNotFoundInEquivalents((
+                "Package {0} for distro {1} not found in "
+                "https://unixpackage.github.io/{0}.json"
+            ).format(package, my_distro))
 
         if type(equivalent) is list:
             distro_specific_packages.extend(equivalent)

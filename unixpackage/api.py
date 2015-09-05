@@ -108,6 +108,11 @@ def package_list(generic_package_list):
             with open(cache_filename, 'r') as cache_read_handle:
                 package_equivalents = json.loads(cache_read_handle.read())
         else:
+            stdout.write((
+                "Requesting and caching your system's package names for: {}...\n"
+            ).format(package))
+            stdout.flush()
+
             req = requests.get(
                 "https://unixpackage.github.io/{}.json".format(package)
             )

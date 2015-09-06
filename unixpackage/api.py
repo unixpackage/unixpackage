@@ -27,6 +27,9 @@ class PackageNotFound(UnixPackageException):
 class NetworkError(UnixPackageException):
     pass
 
+class PackageDescriptionNotUnderstood(UnixPackageException):
+    pass
+
 
 DISTROS = {
     "ubuntu": {
@@ -147,8 +150,15 @@ def package_list(generic_package_list):
 
         if type(equivalent) is list:
             distro_specific_packages.extend(equivalent)
-        else:
+        elif type(equivalent) is str:
             distro_specific_packages.append(equivalent)
+        elif equivalent is None
+            pass
+        else:
+            raise PackageDescriptionNotUnderstood((
+                "Format of {} equivalent for package"
+                "{} was not understood."
+            ).format(my_distro, package))
 
     return distro_specific_packages
 

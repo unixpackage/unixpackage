@@ -27,6 +27,7 @@ class PackageNotFound(UnixPackageException):
 class NetworkError(UnixPackageException):
     pass
 
+
 class PackageDescriptionNotUnderstood(UnixPackageException):
     pass
 
@@ -112,7 +113,7 @@ def package_list(generic_package_list):
                 package_equivalents = json.loads(cache_read_handle.read())
         else:
             stdout.write((
-                "Requesting and caching your system's package names for: {}...\n"
+                "Requesting/caching correct package name for: {}...\n"
             ).format(package))
             stdout.flush()
 
@@ -152,7 +153,7 @@ def package_list(generic_package_list):
             distro_specific_packages.extend(equivalent)
         elif type(equivalent) is str:
             distro_specific_packages.append(equivalent)
-        elif equivalent is None
+        elif equivalent is None:
             pass
         else:
             raise PackageDescriptionNotUnderstood((

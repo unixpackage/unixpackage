@@ -92,6 +92,11 @@ def return_code_zero(command):
     return call(command, stdout=PIPE, stderr=PIPE) == 0
 
 
+def is_string(obj):
+    """Is the object a string/unicode?"""
+    return str(type(obj)) == "<type 'unicode'>" or str(type(obj)) == "<class 'str'>"
+
+
 def what_distro_am_i():
     """Return an identifying name for the distro/platform."""
     if sys.platform == "darwin":
@@ -178,7 +183,7 @@ def package_list(generic_package_list):
 
         if type(equivalent) is list:
             distro_specific_packages.extend(equivalent)
-        elif type(equivalent) is unicode or type(equivalent) is str:
+        elif is_string(equivalent):
             distro_specific_packages.append(equivalent)
         elif equivalent is None:
             pass

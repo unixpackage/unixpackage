@@ -1,5 +1,5 @@
 """UnixPackage command line interface"""
-from click import command, group, argument, echo
+from click import command, group, argument, option, echo
 from unixpackage import api
 from sys import exit
 from os import path
@@ -14,10 +14,14 @@ def cli():
 
 @command()
 @argument('packages', nargs=-1)
-def install(packages):
+@option(
+    '-p', '--polite', is_flag=True,
+    help='Ask politely to install via sudo and double check afterwards.'
+)
+def install(packages, polite):
     """Install package."""
     try:
-        api.install(list(packages))
+        api.install(list(packages), polite=polite)
     except api.UnixPackageException as error:
         echo(error)
         exit(1)

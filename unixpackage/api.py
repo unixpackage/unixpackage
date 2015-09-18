@@ -76,7 +76,7 @@ DISTROS = {
         "base": "arch",
         "install": "pacman -S",
         "sudoinstall": True,
-        "check": ["pacman", "-Qs", ],
+        "check": ["pacman", "-Q", ],
     },
     "macosbrew": {
         "base": "macosbrew",

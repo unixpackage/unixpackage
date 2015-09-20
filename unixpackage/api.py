@@ -41,56 +41,73 @@ class ConnectionFailure(UnixPackageException):
     pass
 
 
-DISTROS = {
-    "ubuntu": {
-        "base": "basedeb",
-        "install": "apt-get install -y",
-        "sudoinstall": True,
-        "check": ["dpkg", "--status", ],
-    },
-    "debian": {
-        "base": "basedeb",
-        "install": "apt-get install -y",
-        "sudoinstall": True,
-        "check": ["dpkg", "--status", ],
-    },
-    "centos": {
-        "base": "baserpm",
-        "install": "yum -y install",
-        "sudoinstall": True,
-        "check": ["dpkg", "--status", ],
-    },
-    "redhat": {
-        "base": "baserpm",
-        "install": "yum -y install",
-        "sudoinstall": True,
-        "check": ["rpm", "-q", ],
-    },
-    "fedora": {
-        "base": "baserpm",
-        "install": "yum -y install",
-        "sudoinstall": True,
-        "check": ["rpm", "-q", ],
-    },
-    "arch": {
-        "base": "arch",
-        "install": "pacman -Sy",
-        "sudoinstall": True,
-        "check": ["pacman", "-Q", ],
-    },
-    "macosbrew": {
-        "base": "macosbrew",
-        "install": "brew install",
-        "sudoinstall": False,
-        "check": ["brew", "list", "--versions", ],
-    }
-}
-
+def check_output(command, stdout=PIPE, stderr=PIPE):
+    """Re-implemented subprocess.check_output since it is not available < python 2.7."""
+    return Popen(command, stdout=stdout, stderr=stderr).communicate()[0]
 
 def return_code_zero(command):
     """Returns True if command called has return code zero."""
     return call(command, stdout=PIPE, stderr=PIPE) == 0
 
+
+DISTROS = {
+    "ubuntu": {
+        "base": "basedeb",
+        "install": "apt-get install -y",
+        "sudoinstall": True,
+        "check": lambda packages: return_code_zero(
+            ["dpkg", "--status", ] + packages
+        ),
+    },
+    "debian": {
+        "base": "basedeb",
+        "install": "apt-get install -y",
+        "sudoinstall": True,
+        "check": lambda packages: return_code_zero(
+            ["dpkg", "--status", ] + packages
+        ),
+    },
+    "centos": {
+        "base": "baserpm",
+        "install": "yum -y install",
+        "sudoinstall": True,
+        "check": lambda packages: return_code_zero(
+            ["dpkg", "--status", ] + packages
+        ),
+    },
+    "redhat": {
+        "base": "baserpm",
+        "install": "yum -y install",
+        "sudoinstall": True,
+        "check": lambda packages: return_code_zero(
+            ["rpm", "--q", ] + packages
+        )
+    },
+    "fedora": {
+        "base": "baserpm",
+        "install": "yum -y install",
+        "sudoinstall": True,
+        "check": lambda packages: return_code_zero(
+            ["rpm", "--q", ] + packages
+        )
+    },
+    "arch": {
+        "base": "arch",
+        "install": "pacman -Sy",
+        "sudoinstall": True,
+        "check":  lambda packages: return_code_zero(
+            ["pacman", "-Q", ] + packages
+        )
+    },
+    "macosbrew": {
+        "base": "macosbrew",
+        "install": "brew install",
+        "sudoinstall": False,
+        "check": lambda packages: len(check_output(
+            ["dpkg", "--status", ] + packages)
+        ) == len(packages),
+    }
+}
 
 def is_string(obj):
     """Is the object a string/unicode?"""
@@ -211,9 +228,7 @@ def packages_installed(packages):
     if len(packages) > 10:
         packages_installed(packages[10:])
         packages = packages[:10]
-    return return_code_zero(
-        DISTROS[what_distro_am_i()]["check"] + package_list(packages)
-    )
+    return DISTROS[what_distro_am_i()]["check"](package_list(packages))
 
 
 def install(packages, polite=False):

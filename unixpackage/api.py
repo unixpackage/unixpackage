@@ -44,37 +44,37 @@ class ConnectionFailure(UnixPackageException):
 DISTROS = {
     "ubuntu": {
         "base": "basedeb",
-        "install": "apt-get install",
+        "install": "apt-get install -y",
         "sudoinstall": True,
         "check": ["dpkg", "--status", ],
     },
     "debian": {
         "base": "basedeb",
-        "install": "apt-get install",
+        "install": "apt-get install -y",
         "sudoinstall": True,
         "check": ["dpkg", "--status", ],
     },
     "centos": {
         "base": "baserpm",
-        "install": "yum install",
+        "install": "yum -y install",
         "sudoinstall": True,
         "check": ["dpkg", "--status", ],
     },
     "redhat": {
         "base": "baserpm",
-        "install": "yum install",
+        "install": "yum -y install",
         "sudoinstall": True,
         "check": ["rpm", "-q", ],
     },
     "fedora": {
         "base": "baserpm",
-        "install": "yum install",
+        "install": "yum -y install",
         "sudoinstall": True,
         "check": ["rpm", "-q", ],
     },
     "arch": {
         "base": "arch",
-        "install": "pacman -S",
+        "install": "pacman -Sy",
         "sudoinstall": True,
         "check": ["pacman", "-Q", ],
     },

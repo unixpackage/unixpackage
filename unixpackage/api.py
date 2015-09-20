@@ -232,12 +232,11 @@ def install(packages, polite=False):
                 "unixpackage will verify successful installation.\n"
             ).format(install_command(packages)))
             stdout.flush()
-        os.system(install_command(packages))
         try:
-            subprocess.check_call("exit 1", shell=True)
+            subprocess.check_call(install_command(packages), shell=True)
         except subprocess.CalledProcessError:
             stderr.write(
-                "\nWARNING : Command failed '{0}'\n\n".format(install_command(packages))
+                "\nWARNING : Command '{0}' returned error code\n\n".format(install_command(packages))
             )
         if not packages_installed(packages):
             raise PackageInstallationFailed(

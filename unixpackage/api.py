@@ -217,7 +217,7 @@ def packages_installed(packages):
 
 
 def install(packages, polite=False):
-    """Attempt installation of specified packages (if not installed)."""
+    """Attempt installation of specified packages (if not already installed)."""
     if len(packages) > 10:
         install(packages[10:])
         packages = packages[:10]
@@ -238,9 +238,19 @@ def install(packages, polite=False):
             stderr.write(
                 "\nWARNING : Command '{0}' returned error code\n\n".format(install_command(packages))
             )
+
+        # Double check that the packages were correctly installed and throw meaningful
+        # error, specifying exactly the packages that were not, if not.
         if not packages_installed(packages):
+            not_yet_installed = []
+            for package in packages:
+                if not packages_installed([package]):
+                    not_yet_installed.append(package)
             raise PackageInstallationFailed(
-                "Package installation of {0} failed.".format(', '.join(packages))
+                "Package installation of {0} failed. Try again with: '{1}'".format(
+                    ', '.join(not_yet_installed),
+                    install_command(not_yet_installed),
+                )
             )
     else:
         stdout.write(

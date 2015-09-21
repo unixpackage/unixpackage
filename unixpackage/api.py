@@ -1,4 +1,4 @@
-from subprocess import call, PIPE
+from subprocess import call, PIPE, Popen
 from sys import stdout, stderr
 from os import path
 import subprocess
@@ -104,7 +104,7 @@ DISTROS = {
         "install": "brew install",
         "sudoinstall": False,
         "check": lambda packages: len(check_output(
-            ["dpkg", "--status", ] + packages)
+            ["brew", "list", "--versions", ] + packages).rstrip().split('\n')
         ) == len(packages),
     }
 }
@@ -262,7 +262,7 @@ def install(packages, polite=False):
                 if not packages_installed([package]):
                     not_yet_installed.append(package)
             raise PackageInstallationFailed(
-                "Package installation of {0} failed. Try again with: '{1}'".format(
+                "Package installation of {0} returned an error code. Try again with: '{1}'".format(
                     ', '.join(not_yet_installed),
                     install_command(not_yet_installed),
                 )

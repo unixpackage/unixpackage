@@ -1,6 +1,6 @@
 """UnixPackage command line interface"""
 from click import command, group, argument, option, echo
-from unixpackage import api
+from unixpackage import api, exceptions
 from sys import exit
 from os import path
 import signal
@@ -22,7 +22,7 @@ def install(packages, polite):
     """Install package."""
     try:
         api.install(list(packages), polite=polite)
-    except api.UnixPackageException as error:
+    except exceptions.UnixPackageException as error:
         echo(error)
         exit(1)
 
@@ -38,7 +38,7 @@ def check(packages):
             echo("One of the packages '{}' is missing.".format(
                 ','.join(packages)
             ))
-    except api.UnixPackageException as error:
+    except exceptions.UnixPackageException as error:
         echo(error)
         exit(1)
 
@@ -49,7 +49,7 @@ def show(packages):
     """Display command used to install packages."""
     try:
         echo(api.install_command(list(packages)))
-    except api.UnixPackageException as error:
+    except exceptions.UnixPackageException as error:
         echo(error)
         exit(1)
 

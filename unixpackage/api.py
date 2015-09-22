@@ -1,5 +1,5 @@
 from unixpackage.package_group import package_group_for_my_distro
-from utils import log, warn, check_call
+from unixpackage.utils import log, warn, check_call
 
 
 def install_command(generic_packages):

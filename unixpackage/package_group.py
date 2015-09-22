@@ -80,7 +80,7 @@ class PackageGroup(object):
 
 class DebPackageGroup(PackageGroup):
     need_sudo = True
-    install_prefix = "apt-get install"
+    install_prefix = "apt-get install -y"
     check_cmd = ["dpkg", "--status", ]
     distro = "Debian"
 

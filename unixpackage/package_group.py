@@ -165,9 +165,11 @@ class MacOSBrewPackageGroup(PackageGroup):
     def check(self):
         """brew list --versions will simply not output not-installed packages specified."""
         if not self.empty():
-            return len(self.specific_packages) == len(utils.check_output(
+            brew_list_output = utils.check_output(
                 ["brew", "list", "--versions", ] + self.specific_packages
-            ).rstrip().split('\n'))
+            ).rstrip()
+            brew_list_installed_pkgs = [x for x in brew_list_output.split('\n') if x != ""]
+            return len(self.specific_packages) == len(brew_list_installed_pkgs)
         else:
             return True
 

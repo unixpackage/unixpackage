@@ -167,7 +167,7 @@ class MacOSBrewPackageGroup(PackageGroup):
         if not self.empty():
             brew_list_output = utils.check_output(
                 ["brew", "list", "--versions", ] + self.specific_packages
-            ).rstrip()
+            ).decode("utf8").rstrip()
             brew_list_installed_pkgs = [x for x in brew_list_output.split('\n') if x != ""]
             return len(self.specific_packages) == len(brew_list_installed_pkgs)
         else:

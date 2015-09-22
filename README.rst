@@ -41,14 +41,14 @@ On Red Hat/CentOS/Fedora::
 Other usage
 -----------
 
-You can also just print the command rather than running it::
+You can also just print the command to install rather than running it::
 
-  $ unixpackage show libpq-dev
-  sudo pacman -S postgresql-libs
+  $ unixpackage show libpq-dev libssl-dev
+  sudo pacman -S postgresql-libs openssl
 
 Or just check to see if it is installed::
 
-  $ unixpackage check libpq-dev
+  $ unixpackage check libpq-dev openssl
   Installed
 
 

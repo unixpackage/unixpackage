@@ -33,11 +33,13 @@ def check(packages):
     """Check to see if a package is installed."""
     try:
         if api.packages_installed(list(packages)):
-            echo("Installed")
+            echo("Package(s) installed")
         else:
-            echo("One of the packages '{}' is missing.".format(
-                ','.join(packages)
-            ))
+            for package in packages:
+                if not api.packages_installed([package, ]):
+                    echo("Package '{0}' is not installed. Install with 'unixpackage install {0}'".format(
+                        package
+                    ))
     except exceptions.UnixPackageException as error:
         echo(error)
         exit(1)

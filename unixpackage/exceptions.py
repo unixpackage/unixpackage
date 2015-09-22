@@ -5,13 +5,12 @@ class UnixPackageException(Exception):
 
 
 class PackageNotFoundInEquivalents(UnixPackageException):
-    def __init__(self, generic_package_name, distro):
+    def __init__(self, package_equivalents, distro):
         super(PackageNotFoundInEquivalents, self).__init__((
-            "Package {0} for distro {1} not found in "
-            "https://unixpackage.github.io/{0}.json "
-            "or in cache file ~/.unixpackage/{0}.json.\n Try running "
-            "unixpackage cleanpkg and try again."
-        ).format(generic_package_name, distro))
+            "Package for distro {1} not found in {0}\n"
+            "Try running 'unixpackage cleancache' or "
+            "raise an issue at https://github.com/unixpackage/unixpackage.github.io/"
+        ).format(package_equivalents, distro))
 
 
 class UnsupportedPlatform(UnixPackageException):

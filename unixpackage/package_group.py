@@ -75,7 +75,7 @@ class PackageGroup(object):
 
     def get_specific_package(self, package_equivalents):
         """Base method to get a specific package (this method must be overridden)."""
-        raise exceptions.PackageNotFoundInEquivalents(package, self.distro)
+        raise exceptions.PackageNotFoundInEquivalents(package_equivalents, self.distro)
 
 
 class DebPackageGroup(PackageGroup):
@@ -187,7 +187,7 @@ def package_group_for_my_distro():
             "Red Hat": RedHatPackageGroup,
             "Fedora": FedoraPackageGroup,
             "CentOS": CentOSPackageGroup,
-            "Arch": ArchPackageGroup,
+            "arch": ArchPackageGroup,
             "Debian": DebianPackageGroup,
         }
 

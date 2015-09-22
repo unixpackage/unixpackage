@@ -113,8 +113,8 @@ class ArchPackageGroup(PackageGroup):
     distro = "Arch"
 
     def get_specific_package(self, package_equivalents):
-        if "ubuntu" in package_equivalents:
-            return package_equivalents["ubuntu"]
+        if "arch" in package_equivalents:
+            return package_equivalents["arch"]
         return super(ArchPackageGroup, self).get_specific_package(package_equivalents)
 
 
@@ -174,7 +174,7 @@ class MacOSBrewPackageGroup(PackageGroup):
     def get_specific_package(self, package_equivalents):
         if "macosbrew" in package_equivalents:
             return package_equivalent["macosbrew"]
-        super(MacOSBrewPackageGroup, self).get_specific_package(package_equivalents)
+        return super(MacOSBrewPackageGroup, self).get_specific_package(package_equivalents)
 
 
 def package_group_for_my_distro():

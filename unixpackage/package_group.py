@@ -173,7 +173,7 @@ class MacOSBrewPackageGroup(PackageGroup):
 
     def get_specific_package(self, package_equivalents):
         if "macosbrew" in package_equivalents:
-            return package_equivalent["macosbrew"]
+            return package_equivalents["macosbrew"]
         return super(MacOSBrewPackageGroup, self).get_specific_package(package_equivalents)
 
 

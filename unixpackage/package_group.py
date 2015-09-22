@@ -183,15 +183,15 @@ def package_group_for_my_distro():
         return MacOSBrewPackageGroup
     elif sys.platform == "linux" or sys.platform == "linux2":
         LINUX_DISTROS = {
-            "Ubuntu": UbuntuPackageGroup,
-            "Red Hat": RedHatPackageGroup,
-            "Fedora": FedoraPackageGroup,
-            "CentOS": CentOSPackageGroup,
+            "ubuntu": UbuntuPackageGroup,
+            "redhat": RedHatPackageGroup,
+            "fedora": FedoraPackageGroup,
+            "centos": CentOSPackageGroup,
             "arch": ArchPackageGroup,
-            "Debian": DebianPackageGroup,
+            "debian": DebianPackageGroup,
         }
 
-        this_distro = platform.linux_distribution()[0]
+        this_distro = platform.linux_distribution()[0].lower()
         if this_distro in LINUX_DISTROS:
             return LINUX_DISTROS[this_distro]
         else:

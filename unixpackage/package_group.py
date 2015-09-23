@@ -125,8 +125,8 @@ class RPMPackageGroup(PackageGroup):
     distro = "RPM Distro"
 
     def get_specific_package(self, package_equivalents):
-        if "basedeb" in package_equivalents:
-            return package_equivalents["basedeb"]
+        if "baserpm" in package_equivalents:
+            return package_equivalents["baserpm"]
         return super(RPMPackageGroup, self).get_specific_package(package_equivalents)
 
 

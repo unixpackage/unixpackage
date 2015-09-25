@@ -51,7 +51,7 @@ class PackageDescriptionNotUnderstood(UnixPackageException):
 class PackageInstallationFailed(UnixPackageException):
     def __init__(self, generic_package_names, installation_command):
         super(PackageInstallationFailed, self).__init__((
-            "Package installation of {0} returned an error code. Try again with: '{1}'"
+            "Package installation of {0} failed. Try again with: '{1}'"
         ).format(', '.join(generic_package_names), installation_command))
 
 

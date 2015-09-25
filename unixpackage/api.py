@@ -29,7 +29,7 @@ def install(generic_packages, polite=False):
         not_preinstalled = package_group.not_installed()
         install_cmd = not_preinstalled.install_cmd()
         if package_group.need_sudo and polite:
-            ctrl_c_message = ("You can also run this command in another window"
+            ctrl_c_message = ("You can also run this command in another window "
                               "and then hit Ctrl-C to continue.\n\n") \
                               if signal.getsignal(signal.SIGINT) == signal.SIG_IGN else ""
 

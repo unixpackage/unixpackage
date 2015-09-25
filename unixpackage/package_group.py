@@ -72,6 +72,16 @@ class PackageGroup(object):
         else:
             return utils.return_code_zero(self.check_cmd + self.specific_packages)
 
+    def not_installed(self):
+        """Return a package group of packages not installed from this group."""
+        not_installed_list = []
+        for package in self.generic_package_list:
+            package_group_of_one = package_group_for_my_distro()([package])
+
+            if not package_group_of_one.check():
+                not_installed_list.append(package)
+        return package_group_for_my_distro()(not_installed_list)
+
     def get_specific_package(self, package_equivalents):
         """Base method to get a specific package (this method must be overridden)."""
         raise exceptions.PackageNotFoundInEquivalents(package_equivalents, self.distro)

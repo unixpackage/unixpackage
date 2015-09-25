@@ -26,7 +26,8 @@ def install(generic_packages, polite=False):
     package_group = package_group_for_my_distro()(generic_packages)
 
     if not package_group.check():
-        install_cmd = package_group.install_cmd()
+        not_preinstalled = package_group.not_installed()
+        install_cmd = not_preinstalled.install_cmd()
         if package_group.need_sudo and polite:
             ctrl_c_message = ("You can also run this command in another window"
                               "and then hit Ctrl-C to continue.\n\n") \
@@ -43,20 +44,17 @@ def install(generic_packages, polite=False):
             warn("\nWARNING : Command '{0}' returned error code\n\n".format(install_cmd))
 
         # Double check that the packages were correctly installed
-        if not package_group.check():
-            not_yet_installed = []
-            for package in generic_packages:
-                package_group_of_one = package_group_for_my_distro()([package])
+        not_installed_after_install_cmd = not_preinstalled.not_installed()
 
-                if not package_group_of_one.check():
-                    not_yet_installed.append(package)
-
+        if not not_installed_after_install_cmd.empty():
             # Throw meaningful error with the command to re-run to install packages
-            not_yet_installed_package_group = package_group_for_my_distro()(not_yet_installed)
-            if len(not_yet_installed) > 0:
-                raise exceptions.PackageInstallationFailed(
-                    not_yet_installed,
-                    not_yet_installed_package_group.install_cmd()
-                )
+            raise exceptions.PackageInstallationFailed(
+                not_installed_after_install_cmd.generic_package_list,
+                not_installed_after_install_cmd.install_cmd()
+            )
+        else:
+            log("Post-install package check for {0} successful!\n".format(
+                ", ".join(not_preinstalled.generic_package_list)
+            ))
     else:
         log("Already installed: {0}\n".format(', '.join(generic_packages)))

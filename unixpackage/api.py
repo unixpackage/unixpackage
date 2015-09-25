@@ -1,6 +1,7 @@
 from unixpackage.package_group import package_group_for_my_distro
 from unixpackage.utils import log, warn, check_call
 from unixpackage import exceptions
+import signal
 
 
 def install_command(generic_packages):
@@ -27,14 +28,15 @@ def install(generic_packages, polite=False):
     if not package_group.check():
         install_cmd = package_group.install_cmd()
         if package_group.need_sudo and polite:
+            ctrl_c_message = ("You can also run this command in another window"
+                              "and then hit Ctrl-C to continue.\n\n") \
+                              if signal.getsignal(signal.SIGINT) == signal.SIG_IGN else ""
+
             log((
-                "The following command must be run to continue:\n"
-                "  ==> {0}\n"
-                "If you like, you can copy and paste the command "
-                "and run it in another terminal window.\n"
-                "After attempting to run the command "
-                "unixpackage will verify successful installation.\n"
-            ).format(install_cmd))
+                "The following command must be run to continue. I am attempting to run it now:"
+                "\n\n\n       {0}\n\n\n"
+                "{1}"
+            ).format(install_cmd, ctrl_c_message))
         try:
             check_call(install_cmd, shell=True)
         except exceptions.CalledProcessError:

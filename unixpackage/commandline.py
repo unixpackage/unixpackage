@@ -1,5 +1,5 @@
 """UnixPackage command line interface"""
-from click import command, group, argument, option, echo
+from unixpackage.click import command, group, argument, option, echo
 from unixpackage import api, exceptions
 from sys import exit
 from os import path

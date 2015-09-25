@@ -1,6 +1,6 @@
 from subprocess import call, Popen, PIPE
 from unixpackage import exceptions
-import requests
+import urllib2
 import json
 import io
 
@@ -35,8 +35,8 @@ def save_json_to_file(cache_filename, contents):
 
 def get_request(url):
     try:
-        req = requests.get(url)
-    except requests.exceptions.ConnectionError:
+        req = urllib2.urlopen(url)
+    except urllib2.URLError:
         raise exceptions.ConnectionFailure((
             "Failure when connecting to {0} "
             "Is your internet working?"

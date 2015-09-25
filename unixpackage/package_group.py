@@ -2,7 +2,6 @@ from unixpackage import exceptions
 from unixpackage import utils
 from sys import stdout
 from os import path
-import requests
 import platform
 import json
 import sys
@@ -34,13 +33,13 @@ class PackageGroup(object):
                 url = "https://unixpackage.github.io/{0}.json".format(package)
                 req = utils.get_request(url)
 
-                if req.status_code == 200:
-                    package_equivalents = req.json()
+                if req.code == 200:
+                    package_equivalents = json.loads(req.read())
                     utils.save_json_to_file(cache_filename, package_equivalents)
-                elif req.status_code == 404:
+                elif req.code == 404:
                     raise exceptions.PackageNotFound(package, url)
                 else:
-                    raise exceptions.NetworkError(url, "status code {0}".format(req.status_code))
+                    raise exceptions.NetworkError(url, "status code {0}".format(req.code))
 
             specific_package_equivalent = self.get_specific_package(package_equivalents)
 

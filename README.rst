@@ -52,6 +52,21 @@ Or just check to see if it is installed::
   Installed
 
 
+Or install in "polite mode"::
+
+  $ unixpackage install libpq-dev --polite
+  The following command must be run to continue. I am attempting to run it now:
+
+
+       sudo apt-get install -y libpq-dev
+
+
+  You can also run this command in another window and then hit Ctrl-C to continue.
+
+  [sudo] password for user:
+
+
+
 Python API
 ----------
 
@@ -65,6 +80,9 @@ There is also a python API for the above commands:
     # Install package if not already installed
     unixpackage.install(["libpq-dev"])
 
+    # Install package if not already installed (in polite mode)
+    unixpackage.install(["libpq-dev"], polite=True)
+
     # Check if packages are installed
     if unixpackage.packages_installed(["libpq-dev"]):
         sys.stdout.write("libpq-dev installed")
@@ -72,11 +90,15 @@ There is also a python API for the above commands:
 
 
 
-Where does it get the package names from?
------------------------------------------
+Package Library
+---------------
 
-Here : http://unixpackage.github.io/libpq-dev.json
+Package names and their equivalents are downloaded from http://unixpackage.github.io/:
 
-To add packages, fork this repository and submit a pull request to this repository: http://github.com/unixpackage/unixpackage.github.io
+Example : http://unixpackage.github.io/libpq-dev.json
 
-Raising an issue if you want packages added is also welcome.
+To add more packages you want to be installable in a UNIX-independent way,
+fork and submit a pull request to this repository:
+http://github.com/unixpackage/unixpackage.github.io
+
+

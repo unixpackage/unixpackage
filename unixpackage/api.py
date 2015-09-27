@@ -57,7 +57,7 @@ def install(generic_packages, polite=False):
                 "\n\n\n       {0}\n\n\n"
                 "You can also run this command in another window "
                 "and then hit Ctrl-C to continue.\n\n"
-            ).format(install_cmd, ctrl_c_message))
+            ).format(install_cmd))
         try:
             check_call(install_cmd, shell=True)
         except exceptions.CalledProcessError:

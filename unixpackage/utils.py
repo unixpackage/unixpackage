@@ -26,7 +26,7 @@ def is_string(obj):
 
 def get_json_from_file(cache_filename):
     with open(cache_filename, 'r') as cache_read_handle:
-        return json.loads(cache_read_handle.read().decode('utf8'))
+        return json.loads(cache_read_handle.read())
 
 def save_json_to_file(cache_filename, contents):
     with open(cache_filename, 'w') as cache_write_handle:

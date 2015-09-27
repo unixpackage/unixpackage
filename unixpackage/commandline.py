@@ -70,7 +70,7 @@ def run():
         """Exit unixpackage."""
         exit(1)
 
-    signal.signal(signal.SIGINT, signal.SIG_IGN)
+    signal.signal(signal.SIGINT, stop_everything)
     signal.signal(signal.SIGTERM, stop_everything)
     signal.signal(signal.SIGHUP, stop_everything)
     signal.signal(signal.SIGQUIT, stop_everything)

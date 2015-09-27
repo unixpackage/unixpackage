@@ -6,11 +6,15 @@ import signal
 
 def install_command(generic_packages):
     """Return an install command for this distro."""
+    if len(generic_packages) == 0:
+        raise exceptions.NoPackagesSpecified()
     return package_group_for_my_distro()(generic_packages).install_cmd()
 
 
 def packages_installed(generic_packages):
     """Verify that the list of packages is installed."""
+    if len(generic_packages) == 0:
+        raise exceptions.NoPackagesSpecified()
     if len(generic_packages) > 10:
         packages_installed(generic_packages[10:])
         generic_packages = generic_packages[:10]
@@ -19,6 +23,8 @@ def packages_installed(generic_packages):
 
 def install(generic_packages, polite=False):
     """Attempt installation of specified packages (if not already installed)."""
+    if len(generic_packages) == 0:
+        raise exceptions.NoPackagesSpecified()
     if len(generic_packages) > 10:
         install(generic_packages[10:])
         generic_packages = generic_packages[:10]

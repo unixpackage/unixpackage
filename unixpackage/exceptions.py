@@ -22,6 +22,11 @@ class UnsupportedPlatform(UnixPackageException):
         ).format(this_distro))
 
 
+class NoPackagesSpecified(UnixPackageException):
+    def __init__(self):
+        super(NoPackagesSpecified, self).__init__("No packages specified.")
+
+
 class PackageNotFound(UnixPackageException):
     def __init__(self, generic_package_name, url):
         super(PackageNotFound, self).__init__((

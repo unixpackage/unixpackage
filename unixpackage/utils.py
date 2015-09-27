@@ -1,6 +1,5 @@
 from subprocess import call, Popen, PIPE
 from unixpackage import exceptions
-import urllib2
 import json
 import io
 
@@ -27,21 +26,40 @@ def is_string(obj):
 
 def get_json_from_file(cache_filename):
     with open(cache_filename, 'r') as cache_read_handle:
-        return json.loads(cache_read_handle.read())
+        return json.loads(cache_read_handle.read().decode('utf8'))
 
 def save_json_to_file(cache_filename, contents):
     with open(cache_filename, 'w') as cache_write_handle:
         cache_write_handle.write(json.dumps(contents))
 
 def get_request(url):
-    try:
-        req = urllib2.urlopen(url)
-    except urllib2.URLError:
-        raise exceptions.ConnectionFailure((
-            "Failure when connecting to {0} "
-            "Is your internet working?"
-        ).format(url))
-    return req
+    """Return the contents of a URL. None if 404. Raise NetworkError otherwise."""
+    import sys
+    if sys.version[0] == "3":
+        from urllib import request
+        from urllib import error
+        try:
+            return request.urlopen(url).read().decode('utf8')
+        except request.HTTPError as error:
+            if error.code == 404:
+                return None
+            else:
+                raise exceptions.NetworkError(url, "status code {0}".format(error.code))
+        except error.URLError as error:
+            raise exceptions.ConnectionFailure(url)
+    else:
+        import urllib
+        try:
+            req = urllib.urlopen(url)
+        except IOError:
+            raise exceptions.ConnectionFailure(url)
+        if req.code == 200:
+            return req.read().decode('utf8')
+        elif req.code == 404:
+            return None
+        else:
+            raise exceptions.NetworkError(url, "status code {0}".format(req.code))
+
 
 def _write(handle, message):
     if isinstance(handle, io.TextIOWrapper):

@@ -31,15 +31,13 @@ class PackageGroup(object):
                 ).format(package))
 
                 url = "https://unixpackage.github.io/{0}.json".format(package)
-                req = utils.get_request(url)
+                contents = utils.get_request(url)
 
-                if req.code == 200:
-                    package_equivalents = json.loads(req.read())
-                    utils.save_json_to_file(cache_filename, package_equivalents)
-                elif req.code == 404:
+                if contents is None:
                     raise exceptions.PackageNotFound(package, url)
                 else:
-                    raise exceptions.NetworkError(url, "status code {0}".format(req.code))
+                    package_equivalents = json.loads(contents)
+                    utils.save_json_to_file(cache_filename, package_equivalents)
 
             specific_package_equivalent = self.get_specific_package(package_equivalents)
 

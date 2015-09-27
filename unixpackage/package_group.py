@@ -190,7 +190,7 @@ def package_group_for_my_distro():
     """Factory that returns a class representing the distro currently being used."""
     if sys.platform == "darwin":
         return MacOSBrewPackageGroup
-    elif sys.platform == "linux" or sys.platform == "linux2":
+    elif sys.platform in ["linux", "linux2", "linux3", ]:
         LINUX_DISTROS = {
             "ubuntu": UbuntuPackageGroup,
             "redhat": RedHatPackageGroup,

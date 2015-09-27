@@ -4,3 +4,5 @@ setup.cfg
 build/
 dist/
 unixpackage.egg-info/
+.hitch
+.vagrant

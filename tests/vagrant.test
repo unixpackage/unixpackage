@@ -1,0 +1,23 @@
+- name: Unixpackage scenarios on ubuntu VM
+  tags:
+    - ubuntu
+    - vagrant
+  preconditions:
+    vagrant: ubuntu
+  scenario:
+    - vagrant ssh: sudo apt-get update
+    - exit with any code
+    - vagrant ssh: sudo apt-get upgrade -y
+    - exit with any code
+    - vagrant ssh: sudo apt-get install python-pip -y
+    - exit
+    - vagrant ssh: sudo pip install {{ repo }}
+    - exit
+    - vagrant ssh: sudo apt-get remove libpq-dev -y
+    - exit
+    - vagrant ssh: unixpackage show libpq-dev
+    - expect: "sudo apt-get install -y libpq-dev"
+    - exit
+    - vagrant ssh: unixpackage install libpq-dev
+    - expect: "Post-install package check for libpq-dev successful"
+    - exit

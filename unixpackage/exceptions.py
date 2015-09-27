@@ -4,6 +4,13 @@ class UnixPackageException(Exception):
     pass
 
 
+class RequirementsFileCannotBeRead(UnixPackageException):
+    def __init__(self, filename):
+        super(RequirementsFileCannotBeRead, self).__init__((
+            "Error reading requirements file '{0}'\n"
+        ).format(filename))
+
+
 class PackageNotFoundInEquivalents(UnixPackageException):
     def __init__(self, package_equivalents, distro):
         super(PackageNotFoundInEquivalents, self).__init__((
@@ -61,7 +68,12 @@ class PackageInstallationFailed(UnixPackageException):
 
 
 class ConnectionFailure(UnixPackageException):
-    pass
+    def __init__(self, url):
+        super(ConnectionFailure, self).__init__((
+                "Failure when connecting to {0}\n"
+                "Is your internet working?"
+            ).format(url))
+
 
 
 class CalledProcessError(UnixPackageException):

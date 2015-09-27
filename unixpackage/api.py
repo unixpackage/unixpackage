@@ -2,6 +2,21 @@ from unixpackage.package_group import package_group_for_my_distro
 from unixpackage.utils import log, warn, check_call
 from unixpackage import exceptions
 import signal
+import os
+
+
+def parse_requirements_file(filename):
+    """Parse Requirements file and return a list of packages."""
+    if filename is not None:
+        filename = os.path.abspath(filename)
+        try:
+            with open(filename, "r") as req_file_handle:
+                list_of_requirements = [x for x in req_file_handle.read().split('\n') if x != ""]
+            return list_of_requirements
+        except IOError:
+            raise exceptions.RequirementsFileCannotBeRead(filename)
+    else:
+        return []
 
 
 def install_command(generic_packages):

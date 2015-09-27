@@ -18,10 +18,16 @@ def cli():
     '-p', '--polite', is_flag=True,
     help='Ask politely to install via sudo and double check afterwards.'
 )
-def install(packages, polite):
+@option(
+    '-r', '--requirements',
+    help='Install requirements from given requirements file.'
+)
+def install(packages, polite, requirements):
     """Install package."""
     try:
-        api.install(list(packages), polite=polite)
+        packages = list(packages)
+        packages.extend(api.parse_requirements_file(requirements))
+        api.install(packages, polite=polite)
     except exceptions.UnixPackageException as error:
         echo(error)
         exit(1)
@@ -29,10 +35,16 @@ def install(packages, polite):
 
 @command()
 @argument('packages', nargs=-1)
-def check(packages):
+@option(
+    '-r', '--requirements',
+    help='Check if requirements from file are installed.'
+)
+def check(packages, requirements):
     """Check to see if a package is installed."""
     try:
-        if api.packages_installed(list(packages)):
+        packages = list(packages)
+        packages.extend(api.parse_requirements_file(requirements))
+        if api.packages_installed(packages):
             echo("Package(s) installed")
         else:
             for package in packages:
@@ -47,10 +59,16 @@ def check(packages):
 
 @command()
 @argument('packages', nargs=-1)
-def show(packages):
+@option(
+    '-r', '--requirements',
+    help='Show install command for requirements listed in file.'
+)
+def show(packages, requirements):
     """Display command used to install packages."""
     try:
-        echo(api.install_command(list(packages)))
+        packages = list(packages)
+        packages.extend(api.parse_requirements_file(requirements))
+        echo(api.install_command(packages))
     except exceptions.UnixPackageException as error:
         echo(error)
         exit(1)

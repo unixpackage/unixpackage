@@ -51,20 +51,35 @@ Or just check to see if it is installed::
   $ unixpackage check libpq-dev openssl
   Installed
 
-
-Or install in "polite mode"::
+Or install using "polite mode"::
 
   $ unixpackage install libpq-dev --polite
   The following command must be run to continue. I am attempting to run it now:
 
 
-       sudo apt-get install -y libpq-dev
+         sudo apt-get install -y libpq-dev
 
 
   You can also run this command in another window and then hit Ctrl-C to continue.
 
   [sudo] password for user:
-
+  Reading package lists... Done
+  Building dependency tree
+  Reading state information... Done
+  Suggested packages:
+    postgresql-doc-9.3
+  The following NEW packages will be installed:
+    libpq-dev
+  0 upgraded, 1 newly installed, 0 to remove and 0 not upgraded.
+  Need to get 0 B/140 kB of archives.
+  After this operation, 741 kB of additional disk space will be used.
+  Selecting previously unselected package libpq-dev.
+  (Reading database ... 231796 files and directories currently installed.)
+  Preparing to unpack .../libpq-dev_9.3.9-0ubuntu0.14.04_amd64.deb ...
+  Unpacking libpq-dev (9.3.9-0ubuntu0.14.04) ...
+  Processing triggers for man-db (2.6.7.1-1ubuntu1) ...
+  Setting up libpq-dev (9.3.9-0ubuntu0.14.04) ...
+  Post-install package check for libpq-dev successful!
 
 
 Python API

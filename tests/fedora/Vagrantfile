@@ -1,0 +1,24 @@
+#!/usr/bin/env ruby
+$BOOTSTRAP_SCRIPT = <<EOF
+echo Running bootstrap script...
+sudo yum update -y
+EOF
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "fedora64"
+  config.vm.box_url = 'https://dl.dropboxusercontent.com/u/15733306/vagrant/fedora-20-netinst-2014_01_05-minimal-puppet-guestadditions.box'
+  config.vm.network :private_network, ip: "192.168.33.44"
+  config.vm.provision :shell, privileged: false, :inline => $BOOTSTRAP_SCRIPT # see above
+  config.ssh.forward_x11 = true
+
+  config.vm.provider :virtualbox do |virtualbox|
+    virtualbox.customize ["modifyvm", :id, "--memory", 5120]
+  end
+
+  config.vm.define :unixpackagefedora do |node|
+    node.vm.box = "fedora64"
+    node.vm.hostname = "unixpackagefedora"
+    node.vm.network :private_network, ip: "192.168.55.248"
+  end
+end
+

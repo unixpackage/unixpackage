@@ -13,7 +13,7 @@ class ExecutionEngine(hitchtest.ExecutionEngine):
 
     def set_up(self):
         """Ensure virtualenv present, then run all services."""
-        self.cli_steps = hitchcli.CommandLineStepLibrary(default_timeout=240)
+        self.cli_steps = hitchcli.CommandLineStepLibrary(default_timeout=360)
 
         self.cd = self.cli_steps.cd
         self.run = self.cli_steps.run
@@ -52,7 +52,11 @@ class ExecutionEngine(hitchtest.ExecutionEngine):
             arguments,
         ))
 
-    def vagrant_ssh(self, command):
+    def v_ssh(self, command):
+        self.run("vagrant", args=["ssh", "-c", command])
+        self.exit()
+
+    def interactive_v_ssh(self, command):
         self.run("vagrant", args=["ssh", "-c", command])
 
     def on_failure(self):
@@ -68,5 +72,7 @@ class ExecutionEngine(hitchtest.ExecutionEngine):
 
     def tear_down(self):
         if self.preconditions is not None and "vagrant" in self.preconditions:
+            print("vagrant halt...")
             self.run("vagrant halt")
             self.exit_with_any_code()
+            print("done")

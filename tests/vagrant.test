@@ -1,23 +1,44 @@
-- name: Unixpackage scenarios on ubuntu VM
+- name: Ubuntu VM scenarios
   tags:
     - ubuntu
     - vagrant
   preconditions:
     vagrant: ubuntu
   scenario:
-    - vagrant ssh: sudo apt-get update
-    - exit with any code
-    - vagrant ssh: sudo apt-get upgrade -y
-    - exit with any code
-    - vagrant ssh: sudo apt-get install python-pip -y
-    - exit
-    - vagrant ssh: sudo pip install {{ repo }}
-    - exit
-    - vagrant ssh: sudo apt-get remove libpq-dev -y
-    - exit
-    - vagrant ssh: unixpackage show libpq-dev
+    - v ssh: sudo apt-get update
+    - v ssh: sudo apt-get upgrade -y
+    - v ssh: sudo apt-get install python-pip -y
+    - v ssh: sudo pip install {{ repo }}
+    - v ssh: sudo apt-get remove libpq-dev -y
+    - interactive v ssh: unixpackage show libpq-dev
     - expect: "sudo apt-get install -y libpq-dev"
     - exit
-    - vagrant ssh: unixpackage install libpq-dev --polite
+    - interactive v ssh: unixpackage check libpq-dev
+    - expect: is not installed
+    - interactive v ssh: unixpackage install libpq-dev --polite
+    - expect: "Post-install package check for libpq-dev successful"
+    - exit
+
+- name: Arch VM scenarios
+  tags:
+    - arch
+    - vagrant
+  preconditions:
+    vagrant: arch
+  scenario:
+    - v ssh: sudo pacman-key --refresh-keys
+    - v ssh: sudo pacman --noconfirm -Sy archlinux-keyring
+    - v ssh: sudo pacman --noconfirm -Syu
+    - v ssh: sudo pacman-db-upgrade
+    - v ssh: sudo pacman --noconfirm -Sy python-pip
+    - interactive v ssh: sudo pacman --noconfirm -Rdd postgresql-libs
+    - exit with any code
+    - v ssh: sudo pip install {{ repo }}
+    - interactive v ssh: unixpackage show libpq-dev
+    - expect: "sudo pacman -Sy postgresql-libs"
+    - exit
+    - interactive v ssh: unixpackage check libpq-dev
+    - expect: is not installed
+    - interactive v ssh: unixpackage install libpq-dev --polite
     - expect: "Post-install package check for libpq-dev successful"
     - exit

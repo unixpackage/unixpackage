@@ -1,0 +1,26 @@
+#!/usr/bin/env ruby
+$BOOTSTRAP_SCRIPT = <<EOF
+echo Running bootstrap script...
+echo export DISPLAY="127.0.0.1:10.0" >> ~/.bashrc
+sudo apt-get update
+sudo apt-get upgrade -y
+EOF
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "debian64"
+  config.vm.box_url = 'https://github.com/holms/vagrant-jessie-box/releases/download/Jessie-v0.1/Debian-jessie-amd64-netboot.box'
+  config.vm.network :private_network, ip: "192.168.50.10"
+  config.vm.provision :shell, privileged: false, :inline => $BOOTSTRAP_SCRIPT # see above
+  config.ssh.forward_x11 = true
+
+  config.vm.provider :virtualbox do |virtualbox|
+    virtualbox.customize ["modifyvm", :id, "--memory", 5120]
+  end
+
+  config.vm.define :unixpackagedebian do |node|
+    node.vm.box = "debian64"
+    node.vm.hostname = "debian"
+    node.vm.network :private_network, ip: "192.168.111.248"
+  end
+end
+

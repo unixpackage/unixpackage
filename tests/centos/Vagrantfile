@@ -1,0 +1,24 @@
+#!/usr/bin/env ruby
+$BOOTSTRAP_SCRIPT = <<EOF
+echo Running bootstrap script...
+sudo yum update -y
+EOF
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "centos64"
+  config.vm.box_url = 'https://github.com/2creatives/vagrant-centos/releases/download/v6.4.2/centos64-x86_64-20140116.box'
+  config.vm.network :private_network, ip: "192.168.50.10"
+  config.vm.provision :shell, privileged: false, :inline => $BOOTSTRAP_SCRIPT # see above
+  config.ssh.forward_x11 = true
+
+  config.vm.provider :virtualbox do |virtualbox|
+    virtualbox.customize ["modifyvm", :id, "--memory", 5120]
+  end
+
+  config.vm.define :unixpackagecentos do |node|
+    node.vm.box = "centos64"
+    node.vm.hostname = "centos"
+    node.vm.network :private_network, ip: "192.168.111.247"
+  end
+end
+

@@ -1,0 +1,23 @@
+#!/usr/bin/env ruby
+$BOOTSTRAP_SCRIPT = <<EOF
+echo Running bootstrap script...
+EOF
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "arch64"
+  config.vm.box_url = 'http://vagrant.srijn.net/archlinux-x64-2014-01-07.box'
+  config.vm.network :private_network, ip: "192.168.50.10"
+  config.vm.provision :shell, privileged: false, :inline => $BOOTSTRAP_SCRIPT # see above
+  config.ssh.forward_x11 = true
+
+  config.vm.provider :virtualbox do |virtualbox|
+    virtualbox.customize ["modifyvm", :id, "--memory", 5120]
+  end
+
+  config.vm.define :unixpackagearch do |node|
+    node.vm.box = "arch64"
+    node.vm.hostname = "arch"
+    node.vm.network :private_network, ip: "192.168.77.198"
+  end
+end
+

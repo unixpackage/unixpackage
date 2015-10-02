@@ -120,3 +120,28 @@
     - expect: Installing
     - expect: "Post-install package check for libpq-dev successful"
     - exit
+
+
+
+- name: CentOS VM scenarios
+  tags:
+    - centos
+    - vagrant
+    - python2
+  preconditions:
+    vagrant: centos
+  scenario:
+    - v ssh: sudo yum update -y
+    - v ssh: sudo yum install python-pip -y
+    - interactive v ssh: sudo yum remove -y postgresql-devel
+    - exit with any code
+    - v ssh: sudo pip install {{ repo }}
+    - interactive v ssh: unixpackage show libpq-dev
+    - expect: "sudo yum -y install postgresql-devel"
+    - exit
+    - interactive v ssh: unixpackage check libpq-dev
+    - expect: is not installed
+    - interactive v ssh: unixpackage install libpq-dev --polite
+    - expect: Installing
+    - expect: "Post-install package check for libpq-dev successful"
+    - exit

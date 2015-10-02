@@ -61,7 +61,13 @@ def get_request(url):
 
 def lsb_release():
     """Return the output of the lsb_release command (should be ubuntu, debian, etc.)"""
-    return check_output(["lsb_release", "--id", "--short"]).decode('utf8').strip()
+    try:
+        # Try the lsb_release command first
+        return check_output(["lsb_release", "--id", "--short"]).decode('utf8').strip()
+    except OSError:
+        # If that fails, try using the built in python method (less reliable)
+        import platform
+        return platform.linux_distribution()[0]
 
 def _write(handle, message):
     if isinstance(handle, io.TextIOWrapper):

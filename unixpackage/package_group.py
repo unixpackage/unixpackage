@@ -200,7 +200,7 @@ def package_group_for_my_distro():
             "debian": DebianPackageGroup,
         }
 
-        this_distro = platform.linux_distribution()[0].lower()
+        this_distro = utils.lsb_release().lower()
         if this_distro in LINUX_DISTROS:
             return LINUX_DISTROS[this_distro]
         else:

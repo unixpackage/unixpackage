@@ -3,7 +3,6 @@ from unixpackage import exceptions
 import json
 import io
 
-
 def return_code_zero(command):
     """Returns True if command called has return code zero."""
     return call(command, stdout=PIPE, stderr=PIPE) == 0
@@ -60,6 +59,9 @@ def get_request(url):
         else:
             raise exceptions.NetworkError(url, "status code {0}".format(req.code))
 
+def lsb_release():
+    """Return the output of the lsb_release command (should be ubuntu, debian, etc.)"""
+    return check_output(["lsb_release", "--id", "--short"]).decode('utf8').strip()
 
 def _write(handle, message):
     if isinstance(handle, io.TextIOWrapper):

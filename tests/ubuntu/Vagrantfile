@@ -10,6 +10,7 @@ Vagrant.configure("2") do |config|
   config.vm.provision :shell, privileged: false, :inline => $BOOTSTRAP_SCRIPT # see above
   config.ssh.forward_x11 = true
   config.vm.synced_folder ".", "/vagrant", type: "rsync", rsync__exclude: ".git/"
+  config.vbguest.auto_update = false
 
   config.vm.provider :virtualbox do |virtualbox|
     virtualbox.customize ["modifyvm", :id, "--memory", 4196]

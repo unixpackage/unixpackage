@@ -2,12 +2,32 @@
   tags:
     - ubuntu
     - vagrant
+    - python3
+    - python2
   preconditions:
     vagrant: ubuntu
   scenario:
     - v ssh: sudo apt-get update
     - v ssh: sudo apt-get upgrade -y
-    - v ssh: sudo apt-get install python-pip -y
+    - v ssh: sudo apt-get install python-pip python3-pip git -y
+    - v ssh: sudo pip install {{ repo }}
+    - v ssh: sudo apt-get remove libpq-dev -y
+    - interactive v ssh: unixpackage install
+    - expect: No packages specified
+    - exit:
+        with code: 1
+    - interactive v ssh: unixpackage install notavalidname
+    - expect: Package notavalidname not found
+    - exit:
+        with code: 1
+    - interactive v ssh: unixpackage show libpq-dev
+    - expect: "sudo apt-get install -y libpq-dev"
+    - exit
+    - interactive v ssh: unixpackage check libpq-dev
+    - expect: is not installed
+    - interactive v ssh: unixpackage install libpq-dev --polite
+    - expect: "Post-install package check for libpq-dev successful"
+    - v ssh: sudo pip uninstall unixpackage --yes
     - v ssh: sudo pip install {{ repo }}
     - v ssh: sudo apt-get remove libpq-dev -y
     - interactive v ssh: unixpackage show libpq-dev
@@ -17,12 +37,44 @@
     - expect: is not installed
     - interactive v ssh: unixpackage install libpq-dev --polite
     - expect: "Post-install package check for libpq-dev successful"
+
+- name: Debian VM scenarios
+  tags:
+    - debian
+    - vagrant
+    - python3
+    - python2
+  preconditions:
+    vagrant: debian
+  scenario:
+    - v ssh: sudo apt-get update
+    - v ssh: sudo apt-get upgrade -y
+    - v ssh: sudo apt-get install python-pip python3-pip git -y
+    - v ssh: sudo pip install {{ repo }}
+    - v ssh: sudo apt-get remove libpq-dev -y
+    - interactive v ssh: unixpackage show libpq-dev
+    - expect: "sudo apt-get install -y libpq-dev"
     - exit
+    - interactive v ssh: unixpackage check libpq-dev
+    - expect: is not installed
+    - interactive v ssh: unixpackage install libpq-dev --polite
+    - expect: "Post-install package check for libpq-dev successful"
+    - v ssh: sudo pip uninstall unixpackage --yes
+    - v ssh: sudo pip install {{ repo }}
+    - v ssh: sudo apt-get remove libpq-dev -y
+    - interactive v ssh: unixpackage show libpq-dev
+    - expect: "sudo apt-get install -y libpq-dev"
+    - exit
+    - interactive v ssh: unixpackage check libpq-dev
+    - expect: is not installed
+    - interactive v ssh: unixpackage install libpq-dev --polite
+    - expect: "Post-install package check for libpq-dev successful"
 
 - name: Arch VM scenarios
   tags:
     - arch
     - vagrant
+    - python3
   preconditions:
     vagrant: arch
   scenario:
@@ -40,5 +92,31 @@
     - interactive v ssh: unixpackage check libpq-dev
     - expect: is not installed
     - interactive v ssh: unixpackage install libpq-dev --polite
+    - expect: Proceed with installation
+    - send line: Y
+    - expect: "Post-install package check for libpq-dev successful"
+    - exit
+
+
+- name: Fedora VM scenarios
+  tags:
+    - fedora
+    - vagrant
+    - python2
+  preconditions:
+    vagrant: fedora
+  scenario:
+    - v ssh: sudo yum update -y
+    - v ssh: sudo yum install python-pip -y
+    - interactive v ssh: sudo yum remove -y postgresql-devel
+    - exit with any code
+    - v ssh: sudo pip install {{ repo }}
+    - interactive v ssh: unixpackage show libpq-dev
+    - expect: "sudo yum -y install postgresql-devel"
+    - exit
+    - interactive v ssh: unixpackage check libpq-dev
+    - expect: is not installed
+    - interactive v ssh: unixpackage install libpq-dev --polite
+    - expect: Installing
     - expect: "Post-install package check for libpq-dev successful"
     - exit

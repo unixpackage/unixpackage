@@ -1,4 +1,5 @@
 from subprocess import check_output, call
+from hitchtest.environment import checks
 from os import path, chdir
 import hitchpython
 import hitchtest
@@ -13,6 +14,8 @@ class ExecutionEngine(hitchtest.ExecutionEngine):
 
     def set_up(self):
         """Ensure virtualenv present, then run all services."""
+        checks.packages(["vagrant"])
+
         self.cli_steps = hitchcli.CommandLineStepLibrary(default_timeout=360)
 
         self.cd = self.cli_steps.cd
@@ -25,13 +28,6 @@ class ExecutionEngine(hitchtest.ExecutionEngine):
         self.show_output = self.cli_steps.show_output
         self.exit = self.cli_steps.exit
 
-        if self.preconditions is not None and "python_version" in self.preconditions:
-            self.python_package = hitchpython.PythonPackage(
-                python_version=self.preconditions['python_version']
-            )
-            self.python_package.build()
-            self.python_package.verify()
-
         if self.preconditions is not None and "vagrant" in self.preconditions:
             self.cd(self.preconditions["vagrant"])
             self.run("vagrant up")
@@ -40,17 +36,6 @@ class ExecutionEngine(hitchtest.ExecutionEngine):
     def pause(self, message=None):
         """Stop. IPython time."""
         self.ipython(message)
-
-    def install_in_virtualenv(self):
-        chdir(PROJECT_DIRECTORY)
-        call([self.python_package.pip, "uninstall", "unixpackage", "-y"])
-        check_output([self.python_package.pip, "install", "."])
-
-    def unixpackage(self, arguments):
-        self.run("{} {}".format(
-            path.join(self.python_package.bin_directory, "unixpackage"),
-            arguments,
-        ))
 
     def v_ssh(self, command):
         self.run("vagrant", args=["ssh", "-c", command])

@@ -11,7 +11,10 @@ def parse_requirements_file(filename):
         filename = os.path.abspath(filename)
         try:
             with open(filename, "r") as req_file_handle:
-                list_of_requirements = [x for x in req_file_handle.read().split('\n') if x != ""]
+                list_of_requirements = [
+                    line for line in req_file_handle.read().split('\n') \
+                        if line.strip() != "" and not line.startswith("#")
+                ]
             return list_of_requirements
         except IOError:
             raise exceptions.RequirementsFileCannotBeRead(filename)

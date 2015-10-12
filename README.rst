@@ -118,11 +118,7 @@ http://github.com/unixpackage/unixpackage.github.io
 
 
 
-Want another package manager/distro?
-------------------------------------
+Want to help?
+-------------
 
-You can help, by:
-
-* Forking http://github.com/unixpackage/unixpackage.github.io and adding packages for your distro.
-* Finding or building a working vagrant box for that environment (for testing).
-* Raising a ticket (or +1'ing an existing one)
+See CONTRIBUTING.rst

@@ -47,3 +47,5 @@ Here are some ideas for features:
 * The ability to detect versions of libraries or other installed software irrespective of what package manager was used to install them, or even if a package manager was used at all (e.g. using ldconfig).
 
 * Version handling - the ability to specify which versions of software to install or check for (e.g. calling "firefox -V" and verifying the output)
+
+* Detect if there is a package installed which has an update.

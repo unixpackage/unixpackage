@@ -42,14 +42,8 @@ Here are some ideas for features:
 
 * Additional linux distros and package managers.
 
-* Ability to handle multiple package managers seamlessly - e.g.
-on Debian, virtualenv and node-less are installed via apt-get,
-whereas on the Mac, virtualenv is installed with pip and node-less
-is installed with npm.
+* Ability to handle multiple package managers seamlessly - e.g. on Debian, virtualenv and node-less are installed via apt-get, whereas on the Mac, virtualenv is installed with pip and node-less is installed with npm.
 
-* The ability to detect versions of libraries or other installed
-software irrespective of what package manager was used to install them,
-or even if a package manager was used at all.
+* The ability to detect versions of libraries or other installed software irrespective of what package manager was used to install them, or even if a package manager was used at all (e.g. using ldconfig).
 
-* Version handling - the ability to specify which versions of software
-to install or check for.
+* Version handling - the ability to specify which versions of software to install or check for (e.g. calling "firefox -V" and verifying the output)

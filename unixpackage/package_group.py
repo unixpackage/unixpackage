@@ -193,6 +193,7 @@ def package_group_for_my_distro():
     elif sys.platform in ["linux", "linux2", "linux3", ]:
         LINUX_DISTROS = {
             "ubuntu": UbuntuPackageGroup,
+            "linuxmint": UbuntuPackageGroup,
             "redhat": RedHatPackageGroup,
             "fedora": FedoraPackageGroup,
             "centos": CentOSPackageGroup,

@@ -197,6 +197,7 @@ def package_group_for_my_distro():
             "redhat": RedHatPackageGroup,
             "fedora": FedoraPackageGroup,
             "centos": CentOSPackageGroup,
+            "manjarolinux": ArchPackageGroup,
             "arch": ArchPackageGroup,
             "debian": DebianPackageGroup,
         }

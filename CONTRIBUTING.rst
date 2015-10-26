@@ -48,4 +48,6 @@ Here are some ideas for features:
 
 * Version handling - the ability to specify which versions of software to install or check for (e.g. calling "firefox -V" and verifying the output)
 
+* Figure out if non package manager installed software is installed (e.g. run /Applications/Firefox.app/Contents/MacOS/firefox-bin or firefox -V).
+
 * Detect if there is a package installed which has an update.

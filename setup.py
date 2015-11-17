@@ -13,7 +13,7 @@ def read(*parts):
     return codecs.open(os.path.join(os.path.abspath(os.path.dirname(__file__)), *parts), 'r').read()
 
 setup(name="unixpackage",
-      version="0.3.9",
+      version="0.4.0",
       description="One command to install equivalent packages in Ubuntu, Debian, CentOS, Fedora, Red Hat and Mac OS X.",
       long_description=read('README.rst'),
       classifiers=[
@@ -35,8 +35,6 @@ setup(name="unixpackage",
       license='AGPL',
       install_requires=[],
       packages=find_packages(exclude=[]),
-      package_data={},
       entry_points=dict(console_scripts=['unixpackage=unixpackage:commandline.run',]),
       zip_safe=False,
-      include_package_data=True,
 )

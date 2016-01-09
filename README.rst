@@ -9,10 +9,16 @@ on your system (e.g. postgresql-libs on Arch).
 Install
 -------
 
-Make sure that you have pip installed (any version). Then run::
+Either::
 
   $ pip install unixpackage
 
+Or::
+
+  $ sudo pip install unixpackage
+
+unixpackage is entirely self contained and has no dependencies. It is
+safe to use sudo pip install with it.
 
 Simple Usage
 ------------
@@ -111,6 +117,8 @@ Package Library
 Package names and their equivalents are downloaded from http://unixpackage.github.io/:
 
 Example : http://unixpackage.github.io/libpq-dev.json
+
+These files are cached in the ~/.unixpackage directory.
 
 To add more packages you want to be installable in a UNIX-independent way,
 fork and submit a pull request to this repository:

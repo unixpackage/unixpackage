@@ -16,7 +16,7 @@ class ExecutionEngine(hitchtest.ExecutionEngine):
         """Ensure virtualenv present, then run all services."""
         checks.packages(["vagrant"])
 
-        self.cli_steps = hitchcli.CommandLineStepLibrary(default_timeout=360)
+        self.cli_steps = hitchcli.CommandLineStepLibrary(default_timeout=720)
 
         self.cd = self.cli_steps.cd
         self.run = self.cli_steps.run

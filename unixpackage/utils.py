@@ -69,6 +69,16 @@ def lsb_release():
         import platform
         return platform.linux_distribution()[0]
 
+def lsb_release_codename():
+    """Return the code name of the release using the lsb_release command (wily, jessie, etc.)."""
+    try:
+        # Try the lsb_release command first
+        return check_output(["lsb_release", "--codename", "--short"]).decode('utf8').strip()
+    except OSError:
+        # If that fails, try using the built in python method (less reliable)
+        import platform
+        return platform.linux_distribution()[2]
+
 def _write(handle, message):
     if isinstance(handle, io.TextIOWrapper):
         handle.write(message)

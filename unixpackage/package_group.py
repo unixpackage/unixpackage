@@ -81,7 +81,10 @@ class PackageGroup(object):
         return package_group_for_my_distro()(not_installed_list)
 
     def get_specific_package(self, package_equivalents):
-        """Base method to get a specific package (this method must be overridden)."""
+        """Base method to get a specific package."""
+        for x in self.__class__.__mro__[:-2]:
+            if x.name in package_equivalents:
+                return package_equivalents[x.name]
         raise exceptions.PackageNotFoundInEquivalents(package_equivalents, self.distro)
 
 
@@ -90,27 +93,65 @@ class DebPackageGroup(PackageGroup):
     install_prefix = "apt-get install -y"
     check_cmd = ["dpkg", "--status", ]
     distro = "Debian"
-
-    def get_specific_package(self, package_equivalents):
-        if "basedeb" in package_equivalents:
-            return package_equivalents["basedeb"]
-        return super(DebPackageGroup, self).get_specific_package(package_equivalents)
+    name = "basedeb"
 
 
 class DebianPackageGroup(DebPackageGroup):
-    def get_specific_package(self, package_equivalents):
-        if "debian" in package_equivalents:
-            return package_equivalents["debian"]
-        return super(DebianPackageGroup, self).get_specific_package(package_equivalents)
+    name = "debian"
+
+
+class DebianSqueezePackageGroup(DebianPackageGroup):
+    name = "debian-squeeze"
+
+
+class DebianSqueezeLTSPackageGroup(DebianPackageGroup):
+    name = "debian-squeeze-lts"
+
+
+class DebianWheezyPackageGroup(DebianPackageGroup):
+    name = "debian-wheezy"
+
+
+class DebianJessiePackageGroup(DebianPackageGroup):
+    name = "debian-jessie"
+
+
+class DebianStretchPackageGroup(DebianPackageGroup):
+    name = "debian-stretch"
+
+
+class DebianSidPackageGroup(DebianPackageGroup):
+    name = "debian-sid"
 
 
 class UbuntuPackageGroup(DebPackageGroup):
     distro = "Ubuntu"
+    name = "ubuntu"
 
-    def get_specific_package(self, package_equivalents):
-        if "ubuntu" in package_equivalents:
-            return package_equivalents["ubuntu"]
-        return super(UbuntuPackageGroup, self).get_specific_package(package_equivalents)
+
+class UbuntuPrecisePackageGroup(UbuntuPackageGroup):
+    distro = "Ubuntu"
+    name = "ubuntu-precise"
+
+
+class UbuntuTrustyPackageGroup(UbuntuPackageGroup):
+    distro = "Ubuntu"
+    name = "ubuntu-trusty"
+
+
+class UbuntuVividPackageGroup(UbuntuPackageGroup):
+    distro = "Ubuntu"
+    name = "ubuntu-vivid"
+
+
+class UbuntuWilyPackageGroup(UbuntuPackageGroup):
+    distro = "Ubuntu"
+    name = "ubuntu-wily"
+
+
+class UbuntuXenialPackageGroup(UbuntuPackageGroup):
+    distro = "Ubuntu"
+    name = "ubuntu-xenial"
 
 
 class ArchPackageGroup(PackageGroup):
@@ -118,11 +159,7 @@ class ArchPackageGroup(PackageGroup):
     install_prefix = "pacman -Sy"
     check_cmd = ["pacman", "-Q", ]
     distro = "Arch"
-
-    def get_specific_package(self, package_equivalents):
-        if "arch" in package_equivalents:
-            return package_equivalents["arch"]
-        return super(ArchPackageGroup, self).get_specific_package(package_equivalents)
+    name = "arch"
 
 
 class RPMPackageGroup(PackageGroup):
@@ -130,44 +167,29 @@ class RPMPackageGroup(PackageGroup):
     install_prefix = "yum -y install"
     check_cmd = ["rpm", "-q", ]
     distro = "RPM Distro"
-
-    def get_specific_package(self, package_equivalents):
-        if "baserpm" in package_equivalents:
-            return package_equivalents["baserpm"]
-        return super(RPMPackageGroup, self).get_specific_package(package_equivalents)
+    name = "baserpm"
 
 
 class CentOSPackageGroup(RPMPackageGroup):
     distro = "CentOS"
-
-    def get_specific_package(self, package_equivalents):
-        if "centos" in package_equivalents:
-            return package_equivalents["centos"]
-        return super(CentOSPackageGroup, self).get_specific_package(package_equivalents)
+    name = "centos"
 
 
 class FedoraPackageGroup(RPMPackageGroup):
     distro = "Fedora"
-
-    def get_specific_package(self, package_equivalents):
-        if "fedora" in package_equivalents:
-            return package_equivalents["fedora"]
-        return super(FedoraPackageGroup, self).get_specific_package(package_equivalents)
+    name = "fedora"
 
 
 class RedHatPackageGroup(RPMPackageGroup):
     distro = "Red Hat"
-
-    def get_specific_package(self, package_equivalents):
-        if "redhat" in package_equivalents:
-            return package_equivalents["redhat"]
-        return super(RedHatPackageGroup, self).get_specific_package(package_equivalents)
+    name = "redhat"
 
 
 class MacOSBrewPackageGroup(PackageGroup):
     need_sudo = False
     install_prefix = "brew install"
     distro = "Mac OS X"
+    name = "macosbrew"
 
     def check(self):
         """brew list --versions will simply not output not-installed packages specified."""
@@ -180,11 +202,6 @@ class MacOSBrewPackageGroup(PackageGroup):
         else:
             return True
 
-    def get_specific_package(self, package_equivalents):
-        if "macosbrew" in package_equivalents:
-            return package_equivalents["macosbrew"]
-        return super(MacOSBrewPackageGroup, self).get_specific_package(package_equivalents)
-
 
 def package_group_for_my_distro():
     """Factory that returns a class representing the distro currently being used."""
@@ -192,7 +209,6 @@ def package_group_for_my_distro():
         return MacOSBrewPackageGroup
     elif sys.platform in ["linux", "linux2", "linux3", ]:
         LINUX_DISTROS = {
-            "ubuntu": UbuntuPackageGroup,
             "linuxmint": UbuntuPackageGroup,
             "redhat": RedHatPackageGroup,
             "fedora": FedoraPackageGroup,
@@ -200,12 +216,32 @@ def package_group_for_my_distro():
             "manjarolinux": ArchPackageGroup,
             "arch": ArchPackageGroup,
             "debian": DebianPackageGroup,
+            "debian-squeeze": DebianSqueezePackageGroup,
+            "debian-squeeze-lts": DebianSqueezeLTSPackageGroup,
+            "debian-wheezy": DebianWheezyPackageGroup,
+            "debian-jessie": DebianJessiePackageGroup,
+            "debian-stretch": DebianStretchPackageGroup,
+            "debian-sid": DebianSidPackageGroup,
+            "ubuntu": UbuntuPackageGroup,
+            "ubuntu-precise": UbuntuPrecisePackageGroup,
+            "ubuntu-trusty": UbuntuTrustyPackageGroup,
+            "ubuntu-vivid": UbuntuVividPackageGroup,
+            "ubuntu-wily": UbuntuWilyPackageGroup,
+            "ubuntu-xenial": UbuntuXenialPackageGroup,
         }
 
         this_distro = utils.lsb_release().lower()
-        if this_distro in LINUX_DISTROS:
-            return LINUX_DISTROS[this_distro]
+
+        if this_distro in ["debian", "ubuntu",]:
+            return LINUX_DISTROS[
+                "{0}-{1}".format(
+                    this_distro, utils.lsb_release_codename().lower()
+                )
+            ]
         else:
-            raise exceptions.UnsupportedPlatform(this_distro)
+            if this_distro in LINUX_DISTROS:
+                return LINUX_DISTROS[this_distro]
+            else:
+                raise exceptions.UnsupportedPlatform(this_distro)
     else:
         raise exceptions.UnsupportedPlatform(sys.platform)

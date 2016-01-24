@@ -1,6 +1,7 @@
-- name: Ubuntu VM scenarios
+- name: Trusty VM scenarios
   tags:
     - ubuntu
+    - trusty
     - vagrant
     - python3
     - python2
@@ -37,6 +38,28 @@
     - expect: is not installed
     - interactive v ssh: unixpackage install libpq-dev --polite
     - expect: "Post-install package check for libpq-dev successful"
+
+
+- name: Wily VM scenario
+  tags:
+    - ubuntu
+    - wily
+    - vagrant
+    - python2
+  scenario:
+    - v ssh: sudo apt-get update
+    - v ssh: sudo apt-get upgrade -y
+    - v ssh: sudo apt-get install python-pip python3-pip git -y
+    - v ssh: sudo pip install {{ repo }}
+    - v ssh: sudo apt-get remove libtiff5-dev -y
+    - interactive v ssh: unixpackage show libtiff-dev
+    - expect: "sudo apt-get install -y libtiff5-dev"
+    - exit
+    - interactive v ssh: unixpackage check libtiff-dev
+    - expect: is not installed
+    - interactive v ssh: unixpackage install libtiff-dev --polite
+    - expect: "Post-install package check for libtiff-dev successful"
+
 
 - name: Debian VM scenarios
   tags:

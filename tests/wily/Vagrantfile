@@ -4,8 +4,8 @@ $BOOTSTRAP_SCRIPT = <<EOF
 EOF
 
 Vagrant.configure("2") do |config|
-  config.vm.box = "wily64"
-  config.vm.box_url = 'https://cloud-images.ubuntu.com/vagrant/wily/current/wily-server-cloudimg-amd64-vagrant-disk1.box'
+  config.vm.box = "ubuntu/wily64"
+#   config.vm.box_url = 'https://cloud-images.ubuntu.com/vagrant/wily/current/wily-server-cloudimg-amd64-vagrant-disk1.box'
   config.vm.network :private_network, ip: "192.168.42.9"
   config.vm.provision :shell, privileged: false, :inline => $BOOTSTRAP_SCRIPT # see above
   config.ssh.forward_x11 = true

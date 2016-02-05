@@ -1,3 +1,5 @@
+
+
 - name: Trusty VM scenarios
   tags:
     - ubuntu
@@ -46,12 +48,14 @@
     - wily
     - vagrant
     - python2
+  preconditions:
+    vagrant: wily
   scenario:
     - v ssh: sudo apt-get update
     - v ssh: sudo apt-get upgrade -y
     - v ssh: sudo apt-get install python-pip python3-pip git -y
     - v ssh: sudo pip install {{ repo }}
-    - v ssh: sudo apt-get remove libtiff5-dev -y
+    - v ssh: sudo apt-get remove libtiff-dev -y
     - interactive v ssh: unixpackage show libtiff-dev
     - expect: "sudo apt-get install -y libtiff5-dev"
     - exit

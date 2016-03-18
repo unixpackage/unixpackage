@@ -3,13 +3,16 @@ from unixpackage import exceptions
 import json
 import io
 
+
 def return_code_zero(command):
     """Returns True if command called has return code zero."""
     return call(command, stdout=PIPE, stderr=PIPE) == 0
 
+
 def check_output(command, stdout=PIPE, stderr=PIPE):
     """Re-implemented subprocess.check_output since it is not available < python 2.7."""
     return Popen(command, stdout=stdout, stderr=stderr).communicate()[0]
+
 
 def check_call(command, shell=True):
     """Re-implemented subprocess.check_call since it is not available < python 2.7."""
@@ -19,17 +22,21 @@ def check_call(command, shell=True):
         raise exceptions.CalledProcessError
     return
 
+
 def is_string(obj):
     """Is the object a string/unicode?"""
     return str(type(obj)) == "<type 'unicode'>" or str(type(obj)) == "<class 'str'>"
+
 
 def get_json_from_file(cache_filename):
     with open(cache_filename, 'r') as cache_read_handle:
         return json.loads(cache_read_handle.read())
 
+
 def save_json_to_file(cache_filename, contents):
     with open(cache_filename, 'w') as cache_write_handle:
         cache_write_handle.write(json.dumps(contents))
+
 
 def get_request(url):
     """Return the contents of a URL. None if 404. Raise NetworkError otherwise."""
@@ -59,6 +66,7 @@ def get_request(url):
         else:
             raise exceptions.NetworkError(url, "status code {0}".format(req.code))
 
+
 def lsb_release():
     """Return the output of the lsb_release command (should be ubuntu, debian, etc.)"""
     try:
@@ -68,6 +76,7 @@ def lsb_release():
         # If that fails, try using the built in python method (less reliable)
         import platform
         return platform.linux_distribution()[0]
+
 
 def lsb_release_codename():
     """Return the code name of the release using the lsb_release command (wily, jessie, etc.)."""
@@ -79,6 +88,7 @@ def lsb_release_codename():
         import platform
         return platform.linux_distribution()[2]
 
+
 def _write(handle, message):
     if isinstance(handle, io.TextIOWrapper):
         handle.write(message)
@@ -86,10 +96,12 @@ def _write(handle, message):
         handle.write(message.encode('utf8'))
     handle.flush()
 
+
 def log(message):
     """Output to stdout."""
     import sys
     _write(sys.stdout, message)
+
 
 def warn(message):
     """Output to stderr."""

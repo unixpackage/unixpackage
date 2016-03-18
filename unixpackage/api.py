@@ -3,6 +3,7 @@ from unixpackage.utils import log, warn, check_call
 from unixpackage import exceptions
 import signal
 import os
+import time
 
 
 def parse_requirements_file(filename):
@@ -44,7 +45,7 @@ def install(generic_packages, polite=False):
     if len(generic_packages) == 0:
         raise exceptions.NoPackagesSpecified()
     if len(generic_packages) > 10:
-        install(generic_packages[10:])
+        install(generic_packages[10:], polite=polite)
         generic_packages = generic_packages[:10]
 
     package_group = package_group_for_my_distro()(generic_packages)

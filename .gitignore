@@ -6,3 +6,4 @@ dist/
 unixpackage.egg-info/
 .hitch
 .vagrant
+TODO.txt

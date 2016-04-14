@@ -1,0 +1,31 @@
+#!/usr/bin/env ruby
+$BOOTSTRAP_SCRIPT = <<EOF
+echo Running bootstrap script...
+echo export DISPLAY="127.0.0.1:10.0" >> ~/.bashrc
+#sudo apt-get update
+sudo apt-get install wget git -y
+wget -qO- https://get.docker.com/ | sh
+sudo usermod -aG docker vagrant
+
+
+EOF
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "trusty64"
+  config.vm.box_url = 'https://cloud-images.ubuntu.com/vagrant/wily/current/wily-server-cloudimg-amd64-vagrant-disk1.box'
+  config.vm.network :private_network, ip: "192.168.50.10"
+  config.vm.provision :shell, privileged: false, :inline => $BOOTSTRAP_SCRIPT # see above
+  config.ssh.forward_x11 = true
+
+  config.vm.provider :virtualbox do |virtualbox|
+    virtualbox.customize ["modifyvm", :id, "--memory", 4196]
+  end
+
+  config.vm.define :hitchubuntu do |node|
+    config.vm.synced_folder ".", "/vagrant"
+    node.vm.box = "trusty64"
+    node.vm.hostname = "ubuntu"
+    node.vm.network :private_network, ip: "192.168.111.246"
+  end
+end
+

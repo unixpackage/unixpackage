@@ -114,7 +114,7 @@ There is also a python API for the above commands:
 Package Library
 ---------------
 
-Package names and their equivalents are downloaded from http://unixpackage.github.io/:
+Package names and their equivalents are downloaded from https://github.com/unixpackage/unixpackage.github.io via the generated website:
 
 Example : http://unixpackage.github.io/libpq-dev.json
 

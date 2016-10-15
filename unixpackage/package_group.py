@@ -232,7 +232,7 @@ def package_group_for_my_distro():
             "ubuntu-vivid": UbuntuVividPackageGroup,
             "ubuntu-wily": UbuntuWilyPackageGroup,
             "ubuntu-xenial": UbuntuXenialPackageGroup,
-            "ubuntu-yakkety": UbuntuXenialPackageGroup,
+            "ubuntu-yakkety": UbuntuYakketyPackageGroup,
         }
 
         this_distro = utils.lsb_release().lower()

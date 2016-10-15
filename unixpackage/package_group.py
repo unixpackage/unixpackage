@@ -153,6 +153,10 @@ class UbuntuXenialPackageGroup(UbuntuPackageGroup):
     distro = "Ubuntu"
     name = "ubuntu-xenial"
 
+class UbuntuYakketyPackageGroup(UbuntuPackageGroup):
+    distro = "Ubuntu"
+    name = "ubuntu-yakkety"
+
 
 class ArchPackageGroup(PackageGroup):
     need_sudo = True
@@ -228,16 +232,18 @@ def package_group_for_my_distro():
             "ubuntu-vivid": UbuntuVividPackageGroup,
             "ubuntu-wily": UbuntuWilyPackageGroup,
             "ubuntu-xenial": UbuntuXenialPackageGroup,
+            "ubuntu-yakkety": UbuntuXenialPackageGroup,
         }
 
         this_distro = utils.lsb_release().lower()
 
         if this_distro in ["debian", "ubuntu",]:
-            return LINUX_DISTROS[
-                "{0}-{1}".format(
-                    this_distro, utils.lsb_release_codename().lower()
-                )
-            ]
+            distro_and_version = "{0}-{1}".format(
+                this_distro, utils.lsb_release_codename().lower()
+            )
+            if distro_and_version not in LINUX_DISTROS.keys():
+                raise exceptions.DistroVersionNotFound(distro_and_version)
+            return LINUX_DISTROS[distro_and_version]
         else:
             if this_distro in LINUX_DISTROS:
                 return LINUX_DISTROS[this_distro]

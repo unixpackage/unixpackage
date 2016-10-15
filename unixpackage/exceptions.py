@@ -75,6 +75,12 @@ class ConnectionFailure(UnixPackageException):
             ).format(url))
 
 
+class DistroVersionNotFound(UnixPackageException):
+    def __init__(self, distro_and_version):
+        super(DistroVersionNotFound, self).__init__((
+                "Couldn't find distro and version {0}\n"
+                "This is a bug! Please raise a ticket at https://github.com/unixpackage/unixpackage"
+            ).format(distro_and_version))
 
 class CalledProcessError(UnixPackageException):
     pass

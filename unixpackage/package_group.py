@@ -157,6 +157,10 @@ class UbuntuYakketyPackageGroup(UbuntuPackageGroup):
     distro = "Ubuntu"
     name = "ubuntu-yakkety"
 
+class UbuntuZestyPackageGroup(UbuntuPackageGroup):
+    distro = "Ubuntu"
+    name = "ubuntu-zesty"
+
 
 class ArchPackageGroup(PackageGroup):
     need_sudo = True
@@ -233,6 +237,7 @@ def package_group_for_my_distro():
             "ubuntu-wily": UbuntuWilyPackageGroup,
             "ubuntu-xenial": UbuntuXenialPackageGroup,
             "ubuntu-yakkety": UbuntuYakketyPackageGroup,
+            "ubuntu-zesty": UbuntuZestyPackageGroup,
         }
 
         this_distro = utils.lsb_release().lower()

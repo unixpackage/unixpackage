@@ -161,6 +161,9 @@ class UbuntuZestyPackageGroup(UbuntuPackageGroup):
     distro = "Ubuntu"
     name = "ubuntu-zesty"
 
+class UbuntuArtfulPackageGroup(UbuntuPackageGroup):
+    distro = "Ubuntu"
+    name = "ubuntu-artful"
 
 class ArchPackageGroup(PackageGroup):
     need_sudo = True
@@ -238,6 +241,7 @@ def package_group_for_my_distro():
             "ubuntu-xenial": UbuntuXenialPackageGroup,
             "ubuntu-yakkety": UbuntuYakketyPackageGroup,
             "ubuntu-zesty": UbuntuZestyPackageGroup,
+            "ubuntu-artful": UbuntuArtfulPackageGroup,
         }
 
         this_distro = utils.lsb_release().lower()
